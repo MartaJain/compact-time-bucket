@@ -19,3 +19,10 @@ Aggregating event data often requires grouping timestamps into intervals. Fixed-
 ## Awkward edge
 
 Bucket edges must be finite and strictly increasing. An empty edge list is rejected because there would be no meaningful bucket index to return. NaN timestamps are also rejected; a NaN cannot be placed in any bucket, and silently returning a bucket would hide a data problem.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
